@@ -1,7 +1,10 @@
 const express = require('express');
+const path = require('path');
+const artistRouter = require('./routes/artist');
 const app = express();
 const port = 3000;
-app.use(express.json());
+
+app.use('/artists', artistRouter);
 
 app.get('/', (req, res) => {
   res.status(200).send('Hello World');
