@@ -1,16 +1,18 @@
 const db = require('../../src/db/index.js');
 
-async function createArtist(req, res) {
-  const { name } = req.body; // assuming the name of the new artist is passed in the request body
-  const query = `INSERT INTO Artist (name) VALUES ('${name}')`;
+exports.createArtist = async (req, res) => {
+  const { name, genre } = req.body
+
   try {
-    const result = await db.query(query);
-    res.status(201).send(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    const { rows: [ artist ] } = await db.query('INSERT INTO Artists (name, genre) VALUES ($1, $2) RETURNING *', [name, genre])
+    res.status(201).json(artist)
+  } catch (err) {
+    res.status(500).json(err.message)
   }
 }
+
+
+
 
 
 module.exports = {
